@@ -4,6 +4,9 @@ from groq import Groq  # Import Groq
 
 # Set your Groq API key here
 GROQ_API_KEY = "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"
+GOOGLE_API_KEY = "AIzaSyBpZJYfrHuVqcWG5WaTXQ_-vOKMc3FIRPc"
+ASTRA_DB_APPLICATION_TOKEN = "AstraCS:LfvQnAQHwfAThhucwFQsCfSf:9ce730d740d699dbb1213b5bf88a8680457263237f9e1c85dcf5ec54947c8c2d"
+ASTRA_DB_ID = "86538be5-7d9d-4c2a-9843-e8560b179d01"
 
 # Import your existing code
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -17,20 +20,7 @@ from langchain.embeddings import GooglePalmEmbeddings
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from astrapy import DataAPIClient
 
-# Set your Google API key here
-GOOGLE_API_KEY = "AIzaSyBpZJYfrHuVqcWG5WaTXQ_-vOKMc3FIRPc"
 
-# Provide Astra DB connection details
-ASTRA_DB_APPLICATION_TOKEN = "AstraCS:LfvQnAQHwfAThhucwFQsCfSf:9ce730d740d699dbb1213b5bf88a8680457263237f9e1c85dcf5ec54947c8c2d"
-ASTRA_DB_ID = "86538be5-7d9d-4c2a-9843-e8560b179d01"
-
-# Initialize the client
-client = DataAPIClient(ASTRA_DB_APPLICATION_TOKEN)
-db = client.get_database_by_api_endpoint(
-  "https://86538be5-7d9d-4c2a-9843-e8560b179d01-us-east1.apps.astra.datastax.com"
-)
-
-print(f"Connected to Astra DB: {db.list_collection_names()}")
 
 
 import fitz  # PyMuPDF
@@ -153,6 +143,32 @@ def main():
                 # Add uploaded PDF files to Astra DB
                 add_pdf_to_db(pdf_docs)
                 st.success("PDFs added to Astra DB")
+
+    # Render a different layout for Groq chat
+    if model_type == "Groq":
+        st.title("Chat with Groq Have fun!!!!")
+        groq_question = st.text_input("Ask any question")
+        if st.button("Ask"):
+            if groq_question:
+                with st.spinner("Thinking..."):
+                    time.sleep(2)
+                    response = user_input(groq_question, GOOGLE_API_KEY, model_type)
+                    st.write("Groq:", response)
+
+        # Add suggested prompts as buttons
+        st.subheader("Suggested Prompts:")
+        groq_prompts = [
+            "Do you know what's LPU and how Groq works?",
+            "What is fast inferencing in LPU?",
+            "LPU vs GPU",
+            "How fast is Groq compared to Gemini?"
+        ]
+        for prompt in groq_prompts:
+            if st.button(prompt):
+                with st.spinner("Thinking..."):
+                    time.sleep(2)
+                    response = user_input(prompt, GOOGLE_API_KEY, model_type)
+                    st.write("Groq:", response)
 
 if __name__ == "__main__":
     main()
