@@ -1,0 +1,8 @@
+streamlit: For building interactive web applications with Python.
+time: For handling time-related operations.
+groq: For using the Groq API.
+langchain: A custom library for language processing tasks.
+os: For interacting with the operating system.
+cassio: A Python library for interacting with Cassandra databases.
+fitz: PyMuPDF library for working with PDF files.
+astrapy: A Python client library for DataStax As
